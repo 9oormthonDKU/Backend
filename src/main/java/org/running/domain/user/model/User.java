@@ -48,11 +48,17 @@ public class User implements UserDetails {
     @Column(name = "location", nullable = false)
     private String location;
 
+    @Column(name = "image_url")
+    private String imageUrl; // 프로필 이미지
+
     @Builder
-    public User(String email, String password, String name, String auth){
+    public User(String email, String password, String name, LocalDateTime birth, String location, Integer distance, String auth){
         this.email = email;
         this.password = password;
         this.name = name;
+        this.birth = birth;
+        this.location = location;
+        this.distance = distance;
     }
 
     @Override

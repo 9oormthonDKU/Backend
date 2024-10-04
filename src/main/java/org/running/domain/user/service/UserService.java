@@ -24,6 +24,9 @@ public class UserService {
             .email(signUpRequest.getEmail())
             .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
             .name(signUpRequest.getName())
+            .birth(signUpRequest.getBirth())
+            .distance(signUpRequest.getDistance())
+            .location(signUpRequest.getLocation())
             .build();
 
 
@@ -34,6 +37,5 @@ public class UserService {
             .email(savedUser.getEmail())
             .name(savedUser.getUsername())
             .build();
-
     }
 }
