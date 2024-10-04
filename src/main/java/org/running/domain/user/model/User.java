@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String password;
 
     @Column(name = "birth", nullable = false)
-    private LocalDateTime birth;
+    private LocalDate birth;
 
     @Column(name = "distance", nullable = false)
     private Integer distance;
@@ -52,7 +52,7 @@ public class User implements UserDetails {
     private String imageUrl; // 프로필 이미지
 
     @Builder
-    public User(String email, String password, String name, LocalDateTime birth, String location, Integer distance, String auth){
+    public User(String email, String password, String name, LocalDate birth, String location, Integer distance, String auth){
         this.email = email;
         this.password = password;
         this.name = name;

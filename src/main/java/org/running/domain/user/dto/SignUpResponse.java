@@ -1,6 +1,6 @@
 package org.running.domain.user.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ public class SignUpResponse {
     private Long userId;
     private String email;
     private String name;
-    private LocalDateTime birth;
+    private LocalDate birth;
     private String location;
     private Integer distance;
 }

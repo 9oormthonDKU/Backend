@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,7 +26,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico").permitAll() // 기본 페이지와 정적 리소스 모두 접근 가능
-                .requestMatchers("/api/user/signup/basic").permitAll() // 회원가입 접근 가능
+                .requestMatchers("/user/signup").permitAll() // 회원가입 접근 가능
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
             )
 
