@@ -1,5 +1,6 @@
 package org.running.domian.user.config;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.running.domian.user.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,11 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-
-    // 2. 특정 HTTP 요청에 대한 웹 기반 보안 구성
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -39,13 +39,14 @@ public class SecurityConfig {
             )
 
             .formLogin((formLogin) -> formLogin
-                .loginPage("/user/login") // 로그인 페이지 설정
-                .defaultSuccessUrl("/user/mainlog"))
-
+                .defaultSuccessUrl("/")
+                .permitAll()
+            )
             .logout((logout) -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/user/main")
-                .invalidateHttpSession(true))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true) // 세션 초기화
+            )
 
             // 세션 정책을 IF_REQUIRED로 설정하여 필요할 때만 세션을 생성
             .sessionManagement((sessionManagement) -> sessionManagement
