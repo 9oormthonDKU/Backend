@@ -49,9 +49,10 @@ public class User implements UserDetails {
     private String location;
 
     @Builder
-    public User(String email, String password, String auth){
+    public User(String email, String password, String name, String auth){
         this.email = email;
         this.password = password;
+        this.name = name;
     }
 
     @Override
