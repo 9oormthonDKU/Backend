@@ -1,38 +1,30 @@
 package jpautils.woojuboard.model.entity;
 
 import jakarta.persistence.*;
-import jpautils.woojuboard.model.DeleteStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
-
-@Data
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SQLDelete(sql="UPDATE board SET DELETE_STATUS = 'DELETE' WHERE reply_number = ?")
-public class Reply {
+// 10.4 생성 및 수정
+public class Likes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long replyNumber;
-    // 작성자가 필요 없기 때문에 replyNo로 대체
-
-    @Column(length = 300)
-    private String content;
-
-    @Enumerated(EnumType.STRING)
-    private DeleteStatus deleteStatus;
+    private Long id;
 
     @Column
-    private Long replier;
-    // 10.4 수정 사항
+    private Long boardNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne
     @JoinColumn(name = "BOARD_NUMBER")
     private Board board;
+
 
     @ManyToOne
     @JoinColumn(name="USERS_ID")
