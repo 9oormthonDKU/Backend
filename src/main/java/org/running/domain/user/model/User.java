@@ -1,12 +1,15 @@
 package org.running.domain.user.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
@@ -14,11 +17,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.running.domain.board.model.entity.Apply;
+import org.running.domain.board.model.entity.Likes;
+import org.running.domain.board.model.entity.Reply;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Table(name="users")
+@Table(name="user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
@@ -51,6 +57,39 @@ public class User implements UserDetails {
     @Column(name = "image_url")
     private String imageUrl; // 프로필 이미지
 
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Likes> likes = new ArrayList<>();
+
+    private User addLikes(Long id){
+        Likes likes = new Likes();
+        likes.setUser(this);
+        this.getLikes().add(likes);
+        return this;
+    }
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Apply> apply = new ArrayList<>();
+
+    private User addApply(Long id){
+        Apply apply = new Apply();
+        apply.setUserId(id);
+        apply.setUser(this);
+        this.getApply().add(apply);
+        return this;
+    }
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Reply> reply = new ArrayList<>();
+
+    private User addReply(Long id){
+        Reply reply = new Reply();
+        reply.setReplyNumber(id);
+        reply.setUser(this);
+        this.getReply().add(reply);
+        return this;
+    }
+
     @Builder
     public User(String email, String password, String name, LocalDate birth, String location, Integer distance, String auth){
         this.email = email;
@@ -59,6 +98,7 @@ public class User implements UserDetails {
         this.birth = birth;
         this.location = location;
         this.distance = distance;
+        apply = new ArrayList<>();
     }
 
     @Override
@@ -78,21 +118,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
         return false;
     }
 }

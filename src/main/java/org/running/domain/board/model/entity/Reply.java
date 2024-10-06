@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
+import org.running.domain.user.model.User;
 
 
 @Data
@@ -38,6 +39,7 @@ public class Reply {
     @JoinColumn(name = "BOARD_NUMBER")
     private Board board;
 
-
-
+    @ManyToOne
+    @JoinColumn(name="USERS_ID")
+    private User user;
 }
