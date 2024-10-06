@@ -18,7 +18,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Table(name="users")
+@Table(name="user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
@@ -51,6 +51,8 @@ public class User implements UserDetails {
     @Column(name = "image_url")
     private String imageUrl; // 프로필 이미지
 
+
+
     @Builder
     public User(String email, String password, String name, LocalDate birth, String location, Integer distance, String auth){
         this.email = email;
@@ -78,21 +80,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
         return false;
     }
 }
