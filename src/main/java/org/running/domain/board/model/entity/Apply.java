@@ -1,4 +1,4 @@
-package jpautils.woojuboard.model.entity;
+package org.running.domain.board.model.entity;
 
 
 import jakarta.persistence.*;
@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.*;
+import org.running.domain.board.model.entity.Board;
+import org.running.domain.user.model.User;
 
 @Entity
 @Data
@@ -34,6 +36,6 @@ public class Apply {
 
     @ManyToOne
     @JoinColumn(name="USERS_ID")
-    private Users users;
+    private User user;
 
 }

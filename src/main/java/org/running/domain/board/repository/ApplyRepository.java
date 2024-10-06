@@ -1,9 +1,8 @@
-package jpautils.woojuboard.repository;
+package org.running.domain.board.repository;
 
-import jpautils.woojuboard.model.entity.Apply;
+
+import org.running.domain.board.model.entity.Apply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ApplyRepository implements JpaRepository<Apply,Long>{
-
-
+public interface ApplyRepository extends JpaRepository<Apply, Long> {
 }

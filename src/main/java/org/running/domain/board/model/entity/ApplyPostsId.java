@@ -1,4 +1,4 @@
-package jpautils.woojuboard.model.entity;
+package org.running.domain.board.model.entity;
 
 import lombok.Data;
 

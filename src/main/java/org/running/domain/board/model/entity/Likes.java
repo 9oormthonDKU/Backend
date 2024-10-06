@@ -1,10 +1,10 @@
-package jpautils.woojuboard.model.entity;
+package org.running.domain.board.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
+import org.running.domain.user.model.User;
 
 @Entity
 @Data
@@ -17,17 +17,11 @@ public class Likes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Long boardNumber;
-
-
     @ManyToOne
     @JoinColumn(name = "BOARD_NUMBER")
     private Board board;
 
-
     @ManyToOne
     @JoinColumn(name="USERS_ID")
-    private Users users;
-
+    private User user;
 }

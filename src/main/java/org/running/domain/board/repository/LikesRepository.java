@@ -1,9 +1,7 @@
-package jpautils.woojuboard.repository;
+package org.running.domain.board.repository;
 
-import jpautils.woojuboard.model.entity.Likes;
+import org.running.domain.board.model.entity.Likes;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LikesRepository implements JpaRepository<Likes,Long> {
-
-
+public interface LikesRepository extends JpaRepository<Likes, Long> {
 }

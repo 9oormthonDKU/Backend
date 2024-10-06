@@ -19,5 +19,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("SELECT b FROM Board b LEFT JOIN FETCH b.content c WHERE b.boardNumber = :boardNumber")
     Optional<Board> findBoardWithContentsByBoardNumber(@Param("boardNumber") Long boardNuber);
-
 }

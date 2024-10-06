@@ -1,4 +1,4 @@
-package jpautils.woojuboard.model.entity;
+package org.running.domain.board.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,4 +31,3 @@ public class Apply_posts {
     @JoinColumn(name = "board_id", insertable = false, updatable = false)
     private Board board;
 }
-
