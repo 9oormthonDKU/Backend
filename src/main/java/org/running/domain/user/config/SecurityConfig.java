@@ -1,46 +1,40 @@
 package org.running.domain.user.config;
 
-import lombok.AllArgsConstructor;
-import org.running.domain.user.service.UserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
-@AllArgsConstructor
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico").permitAll() // 기본 페이지와 정적 리소스 모두 접근 가능
-                .requestMatchers("/user/signup").permitAll() // 회원가입 접근 가능
+                .requestMatchers("/user/login","/user/signup").permitAll() // 로그인, 회원가입 누구나 접근 가능
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
             )
 
             .csrf(AbstractHttpConfigurer::disable
             )
 
-            .formLogin((formLogin) -> formLogin
-                .defaultSuccessUrl("/")
-                .permitAll()
-            )
-            .logout((logout) -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true) // 세션 초기화
+            .formLogin(AbstractHttpConfigurer::disable
             )
 
             // 세션 정책을 IF_REQUIRED로 설정하여 필요할 때만 세션을 생성
@@ -57,9 +51,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(
-        AuthenticationConfiguration authenticationConfiguration) throws Exception { // AuthenticationManager은 스프링 시큐리티의 인증을 처리하는 클래스
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(bCryptPasswordEncoder())
+            .and()
+            .build();
     }
 
     @Bean
