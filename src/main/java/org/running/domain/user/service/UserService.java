@@ -27,6 +27,7 @@ public class UserService {
             .email(signUpRequest.getEmail())
             .password(bCryptPasswordEncoder.encode(signUpRequest.getPassword()))
             .name(signUpRequest.getName())
+            .gender(signUpRequest.getGender())
             .birth(signUpRequest.getBirth())
             .distance(signUpRequest.getDistance())
             .location(signUpRequest.getLocation())

@@ -45,6 +45,11 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    // gender 컬럼 추가
+    // 1: 남자, 2: 여자
+    @Column(name = "gender", nullable = false)
+    private Integer gender;
+
     @Column(name = "birth", nullable = false)
     private LocalDate birth;
 
@@ -91,10 +96,11 @@ public class User implements UserDetails {
     }
 
     @Builder
-    public User(String email, String password, String name, LocalDate birth, String location, Integer distance, String auth){
+    public User(String email, String password, String name, Integer gender, LocalDate birth, String location, Integer distance, String auth){
         this.email = email;
         this.password = password;
         this.name = name;
+        this.gender = gender;
         this.birth = birth;
         this.location = location;
         this.distance = distance;
