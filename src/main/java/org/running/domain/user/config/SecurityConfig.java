@@ -34,7 +34,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable
             )
 
-            .formLogin(form -> form.permitAll())
+            .formLogin(form -> form.disable())
 
 //            // 세션 정책을 IF_REQUIRED로 설정하여 필요할 때만 세션을 생성
 //            .sessionManagement((sessionManagement) -> sessionManagement

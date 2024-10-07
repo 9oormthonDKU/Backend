@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.running.domain.user.dto.ProfileResponse;
 import org.running.domain.user.dto.SignUpRequest;
 import org.running.domain.user.dto.SignUpResponse;
+import org.running.domain.user.dto.UpdateUserRequest;
 import org.running.domain.user.model.User;
 import org.running.domain.user.repository.UserRepository;
 import org.springframework.security.core.Authentication;
@@ -41,6 +42,29 @@ public class UserService {
             .email(savedUser.getEmail())
             .name(savedUser.getUsername())
             .build();
+    }
+
+    public void patchUserProfile(Long userId, UpdateUserRequest updateUserRequest) throws Exception {
+        User user = userRepository.findById(userId).orElseThrow(() -> new Exception("유저를 찾을 수 없습니다."));
+
+        // 각 필드를 null 체크 후 수정
+        if (updateUserRequest.getName() != null) {
+            user.setName(updateUserRequest.getName());
+        }
+        if (updateUserRequest.getGender() != null) {
+            user.setGender(updateUserRequest.getGender());
+        }
+        if (updateUserRequest.getBirth() != null) {
+            user.setBirth(updateUserRequest.getBirth());
+        }
+        if (updateUserRequest.getDistance() != null) {
+            user.setDistance(updateUserRequest.getDistance());
+        }
+        if (updateUserRequest.getLocation() != null) {
+            user.setLocation(updateUserRequest.getLocation());
+        }
+
+        userRepository.save(user);
     }
 
 }

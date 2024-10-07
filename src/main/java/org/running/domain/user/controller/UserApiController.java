@@ -5,6 +5,7 @@ import org.running.domain.user.dto.LoginRequest;
 import org.running.domain.user.dto.ProfileResponse;
 import org.running.domain.user.dto.SignUpRequest;
 import org.running.domain.user.dto.SignUpResponse;
+import org.running.domain.user.dto.UpdateUserRequest;
 import org.running.domain.user.model.User;
 import org.running.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,5 +71,20 @@ public class UserApiController{
         ProfileResponse responseDto = new ProfileResponse(user.getName(), user.getBirth(), user.getDistance());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
+    @PatchMapping("/profile")
+    public ResponseEntity<String> updateUserProfile(@RequestBody UpdateUserRequest updateUserRequest) {
+        // 현재 인증된 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        // 서비스 레이어에서 유저 정보 업데이트 처리
+        try {
+            userService.patchUserProfile(user.getId(), updateUserRequest);
+            return ResponseEntity.ok("유저 정보가 성공적으로 수정되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("유저 정보 수정 실패: " + e.getMessage());
+        }
     }
 }
