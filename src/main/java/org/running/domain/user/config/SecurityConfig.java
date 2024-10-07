@@ -34,13 +34,12 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable
             )
 
-            .formLogin(AbstractHttpConfigurer::disable
-            )
+            .formLogin(form -> form.permitAll())
 
-            // 세션 정책을 IF_REQUIRED로 설정하여 필요할 때만 세션을 생성
-            .sessionManagement((sessionManagement) -> sessionManagement
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 필요 시에만 세션 생성
-            )
+//            // 세션 정책을 IF_REQUIRED로 설정하여 필요할 때만 세션을 생성
+//            .sessionManagement((sessionManagement) -> sessionManagement
+//                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 필요 시에만 세션 생성
+//            )
         ;
         return http.build();
     }
@@ -52,11 +51,12 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder
             .userDetailsService(userDetailsService)
-            .passwordEncoder(bCryptPasswordEncoder())
-            .and()
-            .build();
+            .passwordEncoder(bCryptPasswordEncoder());
+
+        return authenticationManagerBuilder.build();
     }
 
     @Bean
