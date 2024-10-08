@@ -73,7 +73,8 @@ public class User implements UserDetails {
     private List<Reply> reply = new ArrayList<>();
 
     @Builder
-    public User(String email, String password, String name, Integer gender, LocalDate birth, String location, Integer distance, String auth){
+    public User(String email, String password, String name, Integer gender, LocalDate birth,
+        String location, Integer distance, String auth) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -109,7 +110,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

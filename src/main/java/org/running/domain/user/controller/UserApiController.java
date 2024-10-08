@@ -8,6 +8,8 @@ import org.running.domain.user.dto.SignUpResponse;
 import org.running.domain.user.dto.UpdateUserRequest;
 import org.running.domain.user.model.User;
 import org.running.domain.user.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("user")
 public class UserApiController{
+    private static final Logger logger = LoggerFactory.getLogger(UserApiController.class);
 
     private final UserService userService;
 
@@ -67,6 +70,10 @@ public class UserApiController{
     public ResponseEntity<ProfileResponse> getUserProfile() {
         // 현재 인증된 사용자의 정보를 가져옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 인증된 사용자 정보 로그 남기기
+        logger.info("인증된 사용자: {}", authentication.getPrincipal());
+
         User user = (User) authentication.getPrincipal(); // UserDetails 대신 User를 사용
         ProfileResponse responseDto = new ProfileResponse(user.getName(), user.getBirth(), user.getDistance());
 
@@ -77,6 +84,7 @@ public class UserApiController{
     public ResponseEntity<String> updateUserProfile(@RequestBody UpdateUserRequest updateUserRequest) {
         // 현재 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         User user = (User) authentication.getPrincipal();
 
         // 서비스 레이어에서 유저 정보 업데이트 처리
