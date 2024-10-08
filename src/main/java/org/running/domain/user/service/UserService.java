@@ -1,14 +1,11 @@
 package org.running.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.running.domain.user.dto.ProfileResponse;
 import org.running.domain.user.dto.SignUpRequest;
 import org.running.domain.user.dto.SignUpResponse;
 import org.running.domain.user.dto.UpdateUserRequest;
 import org.running.domain.user.model.User;
 import org.running.domain.user.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 

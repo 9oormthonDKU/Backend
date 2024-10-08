@@ -63,7 +63,7 @@ public class UserApiController{
         }
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/profile") // 유저 정보 불러오기
     public ResponseEntity<ProfileResponse> getUserProfile() {
         // 현재 인증된 사용자의 정보를 가져옴
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,7 +73,7 @@ public class UserApiController{
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
-    @PatchMapping("/profile")
+    @PatchMapping("/profile") // 유저 정보 수정하기
     public ResponseEntity<String> updateUserProfile(@RequestBody UpdateUserRequest updateUserRequest) {
         // 현재 인증된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

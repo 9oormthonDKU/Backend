@@ -13,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,10 +26,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Table(name="user")
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@Setter
+@Data
 @Entity
 public class User implements UserDetails {
 
@@ -62,38 +63,14 @@ public class User implements UserDetails {
     @Column(name = "image_url")
     private String imageUrl; // 프로필 이미지
 
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Likes> likes = new ArrayList<>();
 
-    private User addLikes(Long id){
-        Likes likes = new Likes();
-        likes.setUser(this);
-        this.getLikes().add(likes);
-        return this;
-    }
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Apply> apply = new ArrayList<>();
 
-    private User addApply(Long id){
-        Apply apply = new Apply();
-        apply.setUserId(id);
-        apply.setUser(this);
-        this.getApply().add(apply);
-        return this;
-    }
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Reply> reply = new ArrayList<>();
-
-    private User addReply(Long id){
-        Reply reply = new Reply();
-        reply.setReplyNumber(id);
-        reply.setUser(this);
-        this.getReply().add(reply);
-        return this;
-    }
 
     @Builder
     public User(String email, String password, String name, Integer gender, LocalDate birth, String location, Integer distance, String auth){
@@ -105,6 +82,29 @@ public class User implements UserDetails {
         this.location = location;
         this.distance = distance;
         apply = new ArrayList<>();
+    }
+
+    private User addLikes(Long id) {
+        Likes likes = new Likes();
+        likes.setUser(this);
+        this.getLikes().add(likes);
+        return this;
+    }
+
+    private User addApply(Long id) {
+        Apply apply = new Apply();
+        apply.setUserId(id);
+        apply.setUser(this);
+        this.getApply().add(apply);
+        return this;
+    }
+
+    private User addReply(Long id) {
+        Reply reply = new Reply();
+        reply.setReplyNumber(id);
+        reply.setUser(this);
+        this.getReply().add(reply);
+        return this;
     }
 
     @Override
@@ -121,5 +121,5 @@ public class User implements UserDetails {
     public String getUsername() {
         return email;
     }
-    
+
 }
