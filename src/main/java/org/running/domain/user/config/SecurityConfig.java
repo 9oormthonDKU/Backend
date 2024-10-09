@@ -27,8 +27,8 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico").permitAll() // 기본 페이지와 정적 리소스 모두 접근 가능
-                .requestMatchers("/user/login","/user/signup").permitAll() // 로그인, 회원가입 누구나 접근 가능
-                .requestMatchers("/user/profile").hasAuthority("ROLE_USER")
+                .requestMatchers("/user/login","/user/signup","/user/profile").permitAll() // 로그인, 회원가입 누구나 접근 가능
+//                .requestMatchers("/user/profile").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
             )
 
