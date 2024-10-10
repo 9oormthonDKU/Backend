@@ -14,9 +14,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -63,16 +65,17 @@ public class UserService {
         );
 
         // 인증이 성공하면 SecurityContext에 저장
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        securityContext.setAuthentication(authentication);
+
+        // 세션에 security context 저장
+        HttpSession session = request.getSession(true); // 세션이 없으면 새로 생성
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, securityContext);
 
         // 인증된 사용자 정보 가져오기
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        // 세션 생성 및 세션 ID 가져오기
-        HttpSession session = request.getSession();
-        String sessionId = session.getId();
-
-        return "로그인 성공: " + userDetails.getUsername() + ", 세션 ID: " + sessionId;
+        return "로그인 성공: " + userDetails.getUsername();
     }
     public void patchUserProfile(Long userId, UpdateUserRequest updateUserRequest) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(() -> new Exception("유저를 찾을 수 없습니다."));

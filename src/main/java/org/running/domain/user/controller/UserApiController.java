@@ -55,6 +55,7 @@ public class UserApiController{
 
         // 인증된 사용자 정보 로그 남기기
         logger.info("인증된 사용자: {}", authentication.getPrincipal());
+        logger.info("인가되었는지: {}", authentication.getAuthorities());
 
         User user = (User) authentication.getPrincipal(); // UserDetails 대신 User를 사용
         ProfileResponse responseDto = new ProfileResponse(user.getName(), user.getBirth(), user.getDistance());
