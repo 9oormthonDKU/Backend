@@ -98,6 +98,12 @@ public class UserService {
         }
 
         userRepository.save(user);
-    }
 
+        // SecurityContextHolder에 수정된 사용자 정보를 업데이트
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
+
+        // SecurityContextHolder에 수정된 인증 정보 설정
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+    }
 }
