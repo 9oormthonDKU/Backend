@@ -69,6 +69,7 @@ public class ReplyService {
     }
 
     // 댓글 수정 기능
+    @Transactional
     public ReplyResponse modify(ReplyModifyRequest replyModifyRequest){
 
         Optional<Reply> replyOptional = replyRepository.findById(replyModifyRequest.getReplyNumber());

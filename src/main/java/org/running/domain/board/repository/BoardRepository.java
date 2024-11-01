@@ -1,6 +1,7 @@
 package org.running.domain.board.repository;
 
 import org.running.domain.board.model.DeleteStatus;
+import org.running.domain.board.model.entity.Apply;
 import org.running.domain.board.model.entity.Board;
 import org.springframework.data.domain.Page; // 수정된 부분
 import org.springframework.data.domain.Pageable; // 수정된 부분
@@ -18,5 +19,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findAllByDeleteStatus(DeleteStatus deleteStatus, Pageable pageable);
 
     @Query("SELECT b FROM Board b LEFT JOIN FETCH b.content c WHERE b.boardNumber = :boardNumber")
-    Optional<Board> findBoardWithContentsByBoardNumber(@Param("boardNumber") Long boardNuber);
+    Optional<Board> findBoardWithContentsByBoardNumber(@Param("boardNumber") Long boardNumber);
+
+
+
 }

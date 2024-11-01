@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -77,6 +78,8 @@ public class UserService {
 
         return "로그인 성공: " + userDetails.getUsername();
     }
+
+    @Transactional
     public void patchUserProfile(Long userId, UpdateUserRequest updateUserRequest) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(() -> new Exception("유저를 찾을 수 없습니다."));
 

@@ -13,11 +13,9 @@ import lombok.NoArgsConstructor;
 public class Apply_posts {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long apply_id;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long board_id;
 
     // ManyToOne 관계 설정
@@ -30,4 +28,6 @@ public class Apply_posts {
     @ManyToOne
     @JoinColumn(name = "board_id", insertable = false, updatable = false)
     private Board board;
+
+
 }
