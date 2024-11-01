@@ -28,7 +28,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico").permitAll() // 기본 페이지와 정적 리소스 모두 접근 가능
                 .requestMatchers("/user/login","/user/signup").permitAll() // 로그인, 회원가입 누구나 접근 가능
-                .requestMatchers("/user/profile").hasAuthority("ROLE_USER")
+                .requestMatchers("/user/profile","/user/info").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated() // 위의 경로 이외에는 모두 인증된 사용자만 접근 가능
             )
 
@@ -42,7 +42,7 @@ public class SecurityConfig {
 
             // 세션 정책을 IF_REQUIRED로 설정하여 필요할 때만 세션을 생성
             .sessionManagement((sessionManagement) -> sessionManagement
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 필요 시에만 세션 생성
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // 필요 시에만 세션 생성
             )
         ;
         return http.build();
