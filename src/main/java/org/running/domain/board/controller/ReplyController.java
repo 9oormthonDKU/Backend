@@ -20,6 +20,7 @@ public class ReplyController {
     private final BoardService boardService;
 
 
+    // Read
     @GetMapping("reply")
     public List<ReplyResponse> showReplies(@PathVariable Long boardNumber){
 
@@ -27,16 +28,19 @@ public class ReplyController {
         return replyService.showReplies(boardResponse);
     }
 
+    // Create
     @PostMapping("reply")
     public BoardResponse makeReply(@RequestBody ReplyPostRequest replyPostRequest){
         return replyService.makeReply(replyPostRequest);
     }
 
+    // Delete
     @DeleteMapping("reply")
     public String deleteBoard(@RequestBody ReplyDeleteRequest replyDeleteRequest){
         return replyService.deleteReply(replyDeleteRequest);
     }
 
+    // Update
     @PatchMapping("reply/{replyNumber}")
     public ReplyResponse modify(@PathVariable Long replyNumber, @RequestBody ReplyModifyRequest replyModifyRequest){
         replyModifyRequest.setReplyNumber(replyNumber);

@@ -52,5 +52,23 @@ public class Board {
         return this;
     }
 
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    private List<Likes> likes = new ArrayList<>();
 
+    public Board addLikes() {
+        Likes likes = new Likes();
+        likes.setBoard(this);
+
+        this.getLikes().add(likes);
+        return this;
+    }
+
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    private List<Apply_posts> applyPosts = new ArrayList<>();
+
+    public Board addApplyPost(Apply_posts applyPost){
+        applyPost.setBoard(this); // Apply_posts와 Board 연결
+        this.getApplyPosts().add(applyPost); // 리스트에 추가
+        return this; // 메소드 체이닝을 위해 this 반환
+    }
 }

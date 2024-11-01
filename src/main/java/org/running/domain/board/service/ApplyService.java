@@ -83,11 +83,14 @@ public class ApplyService {
 
     public String delete(BoardResponse boardResponse){
         Optional<Board> boardOptional = boardRepository.findById(boardResponse.getBoardNumber());
-        Board board = boardOptional.orElse(()->new RuntimeException());
+        Board board = boardOptional
+                .orElseThrow(RuntimeException::new);
 
-        Optional<Apply> applyOptional = ApplyRepository.findByBoard(board);
-        Apply apply = applyOptional.orElse(()->new RuntimeException());
-        ApplyRepository.delete(apply);
+        List<Apply> applyList = applyRepository.findByBoard(board);
+        Apply apply = applyList.stream().findFirst()
+                .orElseThrow(RuntimeException::new);
+
+        applyRepository.delete(apply);
         return "deleted";
     }
 }

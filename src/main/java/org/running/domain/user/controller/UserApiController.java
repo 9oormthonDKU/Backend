@@ -1,13 +1,13 @@
 package org.running.domain.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.running.domain.user.dto.LoginRequest;
-import org.running.domain.user.dto.ProfileResponse;
+import org.running.domain.user.dto.ProfileInfoResponse;
 import org.running.domain.user.dto.SignUpRequest;
 import org.running.domain.user.dto.SignUpResponse;
 import org.running.domain.user.dto.UpdateUserRequest;
+import org.running.domain.user.dto.ProfileResponse;
 import org.running.domain.user.model.User;
 import org.running.domain.user.service.UserService;
 import org.slf4j.Logger;
@@ -48,6 +48,21 @@ public class UserApiController{
         }
     }
 
+    @GetMapping("/info") // 마이페이지 프로필
+    public ResponseEntity<ProfileInfoResponse> getUserInfo() {
+        // 현재 인증된 사용자의 정보를 가져옴
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // 인증된 사용자 정보 로그 남기기
+        logger.info("인증된 사용자: {}", authentication.getPrincipal());
+        logger.info("인가되었는지: {}", authentication.getAuthorities());
+
+        User user = (User) authentication.getPrincipal(); // UserDetails 대신 User를 사용
+        ProfileInfoResponse responseDto = new ProfileInfoResponse(user.getName(), user.getBirth(), user.getDistance());
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
     @GetMapping("/profile") // 유저 정보 불러오기
     public ResponseEntity<ProfileResponse> getUserProfile(HttpServletRequest request) {
         // 현재 인증된 사용자의 정보를 가져옴
@@ -58,7 +73,7 @@ public class UserApiController{
         logger.info("인가되었는지: {}", authentication.getAuthorities());
 
         User user = (User) authentication.getPrincipal(); // UserDetails 대신 User를 사용
-        ProfileResponse responseDto = new ProfileResponse(user.getName(), user.getBirth(), user.getDistance());
+        ProfileResponse responseDto = new ProfileResponse(user.getName(), user.getGender(), user.getBirth(), user.getDistance(), user.getLocation());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

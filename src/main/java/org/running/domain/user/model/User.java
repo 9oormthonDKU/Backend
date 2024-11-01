@@ -28,12 +28,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
 @Entity
-public class User implements UserDetails {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -72,7 +72,7 @@ public class User implements UserDetails {
 
     @Builder
     public User(String email, String password, String name, Integer gender, LocalDate birth,
-        String location, Integer distance, String auth) {
+                String location, Integer distance, String auth) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -92,7 +92,6 @@ public class User implements UserDetails {
 
     private User addApply(Long id) {
         Apply apply = new Apply();
-        apply.setUserId(id);
         apply.setUser(this);
         this.getApply().add(apply);
         return this;
@@ -107,18 +106,14 @@ public class User implements UserDetails {
     }
 
     @Override
+    public String getUsername() {
+        return this.email; // 또는 적절한 필드 반환
+    }
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
 
 }
