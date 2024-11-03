@@ -1,8 +1,10 @@
 package org.running.domain.user.model;
 
+import org.running.domain.board.model.entity.Board;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,9 +16,8 @@ import java.util.Collection;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.running.domain.board.model.entity.Apply;
 import org.running.domain.board.model.entity.Likes;
 import org.running.domain.board.model.entity.Reply;
@@ -24,26 +25,30 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Table(name="user")
+@Table(name = "user")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@Setter
+@Data
 @Entity
-public class User implements UserDetails {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
-    private long id;
+    private Long id;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false,unique = true)
     private String name;
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    // gender 컬럼 추가
+    // 1: 남자, 2: 여자
+    @Column(name = "gender", nullable = false)
+    private Integer gender;
 
     @Column(name = "birth", nullable = false)
     private LocalDate birth;
@@ -57,32 +62,46 @@ public class User implements UserDetails {
     @Column(name = "image_url")
     private String imageUrl; // 프로필 이미지
 
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Likes> likes = new ArrayList<>();
 
-    private User addLikes(Long id){
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Apply> apply = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Reply> reply = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Board> board = new ArrayList<>();
+
+    @Builder
+    public User(String email, String password, String name, Integer gender, LocalDate birth,
+                String location, Integer distance, String auth) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.birth = birth;
+        this.location = location;
+        this.distance = distance;
+        apply = new ArrayList<>();
+    }
+
+    private User addLikes(Long id) {
         Likes likes = new Likes();
         likes.setUser(this);
         this.getLikes().add(likes);
         return this;
     }
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Apply> apply = new ArrayList<>();
-
-    private User addApply(Long id){
+    private User addApply(Long id) {
         Apply apply = new Apply();
-        apply.setUserId(id);
         apply.setUser(this);
         this.getApply().add(apply);
         return this;
     }
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Reply> reply = new ArrayList<>();
-
-    private User addReply(Long id){
+    private User addReply(Long id) {
         Reply reply = new Reply();
         reply.setReplyNumber(id);
         reply.setUser(this);
@@ -90,34 +109,22 @@ public class User implements UserDetails {
         return this;
     }
 
-    @Builder
-    public User(String email, String password, String name, LocalDate birth, String location, Integer distance, String auth){
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.birth = birth;
-        this.location = location;
-        this.distance = distance;
-        apply = new ArrayList<>();
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
+    private User addBoard(Long id){
+        Board board = new Board();
+        board.setBoardNumber(id);
+        board.setUser(this);
+        this.getBoard().add(board);
+        return this;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return this.email; // 또는 적절한 필드 반환
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return false;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
+
 }

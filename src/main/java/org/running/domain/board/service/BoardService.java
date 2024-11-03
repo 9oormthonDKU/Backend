@@ -15,8 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +31,10 @@ public class BoardService {
         board.setTitle(boardPostrequest.getTitle());
         board.setContent(boardPostrequest.getContent());
         board.setDeleteStatus(DeleteStatus.ACTIVE);
+        board.setWhen_meet(boardPostrequest.getWhen_meet());
+        board.setLimits(boardPostrequest.getLimits());
+        board.setDistance(boardPostrequest.getDistance());
+        board.setPace(boardPostrequest.getPace());
 
         return BoardResponse.from(boardRepository.save(board));
     }
@@ -49,6 +53,14 @@ public class BoardService {
                 .map(BoardResponse::from)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 게시글"));
 
+    }
+
+    public List<BoardResponse> searchHotBoard(Long boardNumber){
+        Optional<Board> boardOptional= boardRepository.findById(boardNumber);
+        return boardOptional.stream() // 모든 게시글에 대한 스트림 생성
+                .filter(board -> board.getLikes().size() >= 10) // 좋아요가 10개 이상인 게시글만 필터링
+                .map(BoardResponse::from) // Board 객체를 BoardResponse로 변환
+                .collect(Collectors.toList()); // 결과를 리스트로 수집
     }
 
 
@@ -74,6 +86,11 @@ public class BoardService {
         if (boardModifyRequest.getContent() != null) {
             board.setContent(boardModifyRequest.getContent());
         }
+
+        board.setLocation(boardModifyRequest.getLocation());
+        board.setDistance(boardModifyRequest.getDistance());
+        board.setLimits(boardModifyRequest.getLimits());
+        board.setPace(boardModifyRequest.getPace());
 
         return BoardResponse.from(boardRepository.save(board));
 

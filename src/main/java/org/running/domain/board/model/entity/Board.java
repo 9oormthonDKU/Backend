@@ -8,6 +8,9 @@ import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
+
+import org.running.domain.user.model.User;
 
 @Entity
 @Data
@@ -25,6 +28,7 @@ public class Board {
     private String title;
     //제목
 
+
     @Column(length = 300)
     private String content;
     // 글 내용
@@ -33,6 +37,27 @@ public class Board {
     // 플레그 -> 삭제여부 : Soft Delete
     private DeleteStatus deleteStatus;
 
+    @Column
+    private String location;
+
+    @Column
+    private LocalDateTime when_meet;
+
+    @Column
+    private Integer limits;
+
+    @Column
+    private Long distance;
+
+    @Column
+    private Long pace;
+
+    @Column
+    private Integer statement;
+
+    public void setReplier(User user) {
+        this.user = user;
+    }
 
     /*
     해설강의 필기
@@ -42,15 +67,38 @@ public class Board {
     @SQLRestriction("DELETE_STATUS = 'ACTIVE'")
     private List<Reply> reply = new ArrayList<>();
 
-    public Board addReply(String content){
+    public Board addReply(String content,User user){
         Reply reply = new Reply();
         reply.setContent(content);
         reply.setBoard(this);
+        reply.setUser(user);
         reply.setDeleteStatus(DeleteStatus.ACTIVE);
 
         this.getReply().add(reply);
         return this;
     }
 
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    private List<Likes> likes = new ArrayList<>();
 
+    public Board addLikes() {
+        Likes likes = new Likes();
+        likes.setBoard(this);
+
+        this.getLikes().add(likes);
+        return this;
+    }
+
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    private List<Apply_posts> applyPosts = new ArrayList<>();
+
+    public Board addApplyPost(Apply_posts applyPost){
+        applyPost.setBoard(this); // Apply_posts와 Board 연결
+        this.getApplyPosts().add(applyPost); // 리스트에 추가
+        return this; // 메소드 체이닝을 위해 this 반환
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="USER_NUMBER")
+    private User user;
 }

@@ -24,4 +24,9 @@ public class Likes {
     @ManyToOne
     @JoinColumn(name="USERS_ID")
     private User user;
+
+    @Column
+    private Integer length;
+
+
 }

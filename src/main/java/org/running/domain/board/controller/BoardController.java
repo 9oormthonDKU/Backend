@@ -12,36 +12,40 @@ import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class BoardController {
 
     private final BoardService boardService;
 
-    // 게시물 등록
+    // Create
     @PostMapping("/board")
     public BoardResponse makeBoard(@RequestBody BoardPostRequest boardPostRequest){
         return boardService.makeBoard(boardPostRequest);
     }
 
-    // 게시물 목록 조회 (페이징)
+    // Read - 리스트
     @GetMapping("/board")
     public List<BoardListResponse> boardList(@RequestParam("page") int page, @RequestParam("size") int size){
         return boardService.searchList(page, size);
     }
 
-    // 단건 조회 (특정 게시물 조회)
+    // Read - 단건
     @GetMapping("/board/{id}")
     public BoardResponse searchBoard(@PathVariable("id") Long boardNumber){
         return boardService.searchBoard(boardNumber);
     }
 
-    // 게시물 삭제
+    @GetMapping("/board/hot")
+    public List<BoardResponse> hotList(@RequestParam("boardNumber") Long boardNumber){
+        return boardService.searchHotBoard(boardNumber);
+    }
+
+    // Delete
     @DeleteMapping("/board")
     public String deleteBoard(@RequestBody BoardDeleteRequest boardDeleteRequest){
         return boardService.deleteBoard(boardDeleteRequest);
     }
 
-    // 게시물 수정
+    // Update
     @PatchMapping("/board/{id}")
     public BoardResponse modify(@PathVariable Long id, @RequestBody BoardModifyRequest boardModifyRequest){
         return boardService.modify(boardModifyRequest);
