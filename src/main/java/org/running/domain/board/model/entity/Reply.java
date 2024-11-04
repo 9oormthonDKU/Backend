@@ -24,6 +24,7 @@ public class Reply {
     @Column(length = 300)
     private String content;
 
+
     @Enumerated(EnumType.STRING)
     private DeleteStatus deleteStatus;
 
