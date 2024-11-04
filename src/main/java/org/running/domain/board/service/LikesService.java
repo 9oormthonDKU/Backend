@@ -45,14 +45,14 @@ public class LikesService {
     }
 
     // CRUD : R -> 좋아요 누른 사람들의 수를 불러오는 메소드
-    public long readUserCount(UserResponse userResponse) {
-        Long userId = userResponse.getId();  // 수정된 부분
+    public long readUserCount(Long boardNumber) {
+        // 게시물 ID로 게시물 찾기
+        Board board = boardRepository.findById(boardNumber)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        List<Likes> likes = likesRepository.findByUser(user);
-        return likes.size();  // 좋아요를 누른 사람의 수를 반환
+        // 게시물에 매핑된 Likes 리스트 가져오기
+        List<Likes> likes = board.getLikes();  // Board 엔티티에 likes 필드가 있어야 함
+        return likes.size();  // 게시물에 대한 좋아요 수 반환
     }
 
     // CRUD : C -> 좋아요 누르면 리스트에 등록
