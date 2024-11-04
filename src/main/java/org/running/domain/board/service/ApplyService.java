@@ -53,7 +53,8 @@ public class ApplyService {
         return new ApplyResponse(apply.getId(), user.getId(), board.getBoardNumber()); // 적절한 BoardResponse 반환 처리
 
     }
-    public List<User> read(BoardResponse boardResponse,User user){
+
+    public List<User> read(BoardResponse boardResponse){
 
         Long boardNumber = boardResponse.getBoardNumber();
 
@@ -81,6 +82,7 @@ public class ApplyService {
         return applicants; // 지원한 사용자 리스트 반환
     }
 
+    @Transactional
     public String delete(BoardResponse boardResponse){
         Optional<Board> boardOptional = boardRepository.findById(boardResponse.getBoardNumber());
         Board board = boardOptional
@@ -91,6 +93,27 @@ public class ApplyService {
                 .orElseThrow(RuntimeException::new);
 
         applyRepository.delete(apply);
-        return "deleted";
+
+        return "취소 하였습니다.";
+    }
+
+    @Transactional
+    public String rejectApply(BoardResponse boardResponse, Long applyId) {
+        // 게시판 정보 조회
+        Optional<Board> boardOptional = boardRepository.findById(boardResponse.getBoardNumber());
+        Board board = boardOptional.orElseThrow(RuntimeException::new);
+
+        // 해당 게시글에 대한 지원 찾기
+        Apply apply = applyRepository.findById(applyId)
+                .orElseThrow(() -> new RuntimeException("지원 내역이 없습니다."));
+
+        // 지원이 해당 게시글에 연결되어 있는지 확인
+        if (!apply.getBoard().equals(board)) {
+            throw new RuntimeException("해당 지원은 이 게시글과 관련이 없습니다.");
+        }
+
+        // 지원 삭제
+        applyRepository.delete(apply);
+        return "지원이 거부되었습니다.";
     }
 }

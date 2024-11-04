@@ -23,12 +23,17 @@ public class ApplyController {
     }
 
     @GetMapping("/apply")
-    public List<User> read(@RequestBody BoardResponse boardResponse,User user){
-        return applyService.read(boardResponse,user);
+    public List<User> read(@RequestBody BoardResponse boardResponse){
+        return applyService.read(boardResponse);
     }
 
     @DeleteMapping("/apply")
     public String delete(@RequestBody BoardResponse boardResponse){
         return applyService.delete(boardResponse);
+    }
+
+    @DeleteMapping("/apply/reject")
+    public String rejectApply(@RequestBody BoardResponse boardResponse, @PathVariable Long applyId) {
+        return applyService.rejectApply(boardResponse, applyId);
     }
 }

@@ -6,7 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LikesDeleteRequest {
-
     private Long id;
-
 }
