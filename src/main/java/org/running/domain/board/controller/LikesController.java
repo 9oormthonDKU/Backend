@@ -25,8 +25,8 @@ public class LikesController {
 
     // Read
     @GetMapping("/likes")
-    public List<LikesResponse> showLikes(@RequestParam Long boardNumber){
-        return likesService.read(boardNumber);
+    public Long showLikes(@RequestParam Long boardNumber){
+        return likesService.readUserCount(boardNumber);
     }
 
     // Delete

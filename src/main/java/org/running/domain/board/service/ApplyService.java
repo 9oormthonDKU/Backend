@@ -53,7 +53,7 @@ public class ApplyService {
         return new ApplyResponse(apply.getId(), user.getId(), board.getBoardNumber()); // 적절한 BoardResponse 반환 처리
 
     }
-    public List<User> read(BoardResponse boardResponse,User user){
+    public List<User> read(BoardResponse boardResponse){
 
         Long boardNumber = boardResponse.getBoardNumber();
 

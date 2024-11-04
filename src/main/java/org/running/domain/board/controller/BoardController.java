@@ -30,7 +30,7 @@ public class BoardController {
     }
 
     // Read - 리스트
-    @GetMapping("/board")
+    @GetMapping("/board/list")
     public List<BoardListResponse> boardList(@RequestParam("page") int page, @RequestParam("size") int size){
         return boardService.searchList(page, size);
     }
