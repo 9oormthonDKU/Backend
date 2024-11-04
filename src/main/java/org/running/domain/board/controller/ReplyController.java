@@ -41,7 +41,7 @@ public class ReplyController {
     }
 
     // Update
-    @PatchMapping("reply/{replyNumber}")
+    @PatchMapping("reply")
     public ReplyResponse modify(@PathVariable Long replyNumber, @RequestBody ReplyModifyRequest replyModifyRequest){
         replyModifyRequest.setReplyNumber(replyNumber);
         return replyService.modify(replyModifyRequest);

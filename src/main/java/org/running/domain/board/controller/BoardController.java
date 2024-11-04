@@ -36,8 +36,8 @@ public class BoardController {
     }
 
     // Read - 단건
-    @GetMapping("/board/{id}")
-    public BoardResponse searchBoard(@PathVariable("id") Long boardNumber){
+    @GetMapping("/board")
+    public BoardResponse searchBoard(@PathVariable("boardNumber") Long boardNumber){
         return boardService.searchBoard(boardNumber);
     }
 
@@ -69,7 +69,7 @@ public class BoardController {
     }
 
     // Update
-    @PatchMapping("/board/{id}")
+    @PatchMapping("/board")
     public BoardResponse modify(@PathVariable Long id, @RequestBody BoardModifyRequest boardModifyRequest){
         return boardService.modify(boardModifyRequest);
     }
