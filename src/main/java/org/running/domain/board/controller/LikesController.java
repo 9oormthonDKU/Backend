@@ -33,6 +33,6 @@ public class LikesController {
     @DeleteMapping("/likes")
     public String deleteLikes(@RequestBody LikesDeleteRequest likesDeleteRequest){
         return likesService.delete(likesDeleteRequest);
-    }
 
+    }
 }

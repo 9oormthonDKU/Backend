@@ -1,5 +1,6 @@
 package org.running.domain.board.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.running.domain.board.model.DeleteStatus;
 import lombok.*;
@@ -41,6 +42,7 @@ public class Board {
     private String location;
 
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime when_meet;
 
     @Column
