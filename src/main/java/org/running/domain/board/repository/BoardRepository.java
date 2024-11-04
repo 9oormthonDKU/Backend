@@ -5,6 +5,7 @@ import org.running.domain.board.model.entity.Apply;
 import org.running.domain.board.model.entity.Board;
 import org.springframework.data.domain.Page; // 수정된 부분
 import org.springframework.data.domain.Pageable; // 수정된 부분
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,6 +23,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("SELECT b FROM Board b WHERE b.boardNumber = :boardNumber")
     Optional<Board> findBoardWithContentsByBoardNumber(@Param("boardNumber") Long boardNumber);
 
-
+    Page<Board> findAll(Specification<Board> spec, Pageable pageable);
+    // page 객체 넘겨주기
 
 }

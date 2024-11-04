@@ -55,10 +55,6 @@ public class Board {
     @Column
     private Integer statement;
 
-    public void setReplier(User user) {
-        this.user = user;
-    }
-
     /*
     해설강의 필기
     Active 상태인 것만 가져오도록 @SQLRestriction 사용
@@ -77,7 +73,6 @@ public class Board {
         this.getReply().add(reply);
         return this;
     }
-
     @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
     private List<Likes> likes = new ArrayList<>();
 
@@ -96,6 +91,12 @@ public class Board {
         applyPost.setBoard(this); // Apply_posts와 Board 연결
         this.getApplyPosts().add(applyPost); // 리스트에 추가
         return this; // 메소드 체이닝을 위해 this 반환
+    }
+
+    // 지원자 없애기
+    public void removeApply(Apply apply) {
+        this.applyPosts.remove(apply);
+        apply.setBoard(null);
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

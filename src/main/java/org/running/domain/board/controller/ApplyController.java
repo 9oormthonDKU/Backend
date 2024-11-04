@@ -31,4 +31,9 @@ public class ApplyController {
     public String delete(@RequestBody BoardResponse boardResponse){
         return applyService.delete(boardResponse);
     }
+
+    @DeleteMapping("/apply/reject/{applyId}")
+    public String rejectApply(@RequestBody BoardResponse boardResponse, @PathVariable Long applyId) {
+        return applyService.rejectApply(boardResponse, applyId);
+    }
 }
