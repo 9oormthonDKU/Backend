@@ -20,15 +20,23 @@ public class Apply {
     private Long id;
 
     // Apply_posts와의 OneToMany 관계
-    @OneToMany(mappedBy = "apply")
+    @OneToMany(mappedBy = "apply", cascade = CascadeType.PERSIST)
     private List<Apply_posts> apply_posts = new ArrayList<>();
 
     public Apply_posts addApply_Posts(Board board) {
         Apply_posts apply_post = new Apply_posts();
-        apply_post.setApply(this);  // 현재 Apply 객체를 설정
-        apply_post.setBoard(board);  // 연결할 Board 객체 설정 (이 경우 Board 객체를 파라미터로 전달)
-        apply_posts.add(apply_post);  // 리스트에 추가
-        return apply_post;  // 생성한 Apply_posts 객체 반환
+
+        // apply와 board 필드가 null이 아닌지 확인하고 설정
+        apply_post.setApply(this);
+        apply_post.setBoard(board);
+
+        // 복합 키 설정이 필요한 경우, `ApplyPostsId`도 설정하는 로직을 추가할 수 있습니다.
+        // apply_post.setApplyId(this.getId());
+        // apply_post.setBoardId(board.getId());
+
+        // 양방향 관계의 일관성 유지
+        this.apply_posts.add(apply_post);
+        return apply_post;
     }
     @ManyToOne
     @JoinColumn(name="USERS_ID")
@@ -37,4 +45,9 @@ public class Apply {
     @ManyToOne
     @JoinColumn(name = "board_id") // 이 부분은 실제 외래 키 이름에 맞춰 조정
     private Board board;
+
+    public void removeApplyPost(Apply_posts applyPost) {
+        this.apply_posts.remove(applyPost);
+        applyPost.setApply(null); // 관계 해제
+    }
 }

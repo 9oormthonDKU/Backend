@@ -11,4 +11,7 @@ import java.util.*;
 @Repository
 public interface ApplyRepository extends JpaRepository<Apply, Long> {
     List<Apply> findByBoard(Board board);
+    Optional<Apply> findByBoardBoardNumberAndUserId(Long boardNumber, Long userId);
+    Optional<Apply> findByUserIdAndBoardBoardNumber(Long userId, Long boardNumber);
+
 }
